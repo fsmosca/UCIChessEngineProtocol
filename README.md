@@ -380,14 +380,14 @@ Engine to GUI:
 			The engine wants to behave differently when analysing or playing a game.
 			For example when playing it can use some kind of learning.
 			This is set to false if the engine is playing a game, otherwise it is true.
-		 * <id> = UCI_Opponent, type string
+		* <id> = UCI_Opponent, type string
 		 	With this command the GUI can send the name, title, elo and if the engine is playing a human
 			or computer to the engine.
 			The format of the string has to be [GM|IM|FM|WGM|WIM|none] [<elo>|none] [computer|human] <name>
 			Examples:
 			"setoption name UCI_Opponent value GM 2800 human Gary Kasparov"
 			"setoption name UCI_Opponent value none none computer Shredder"
-		 * <id> = UCI_EngineAbout, type string
+		* <id> = UCI_EngineAbout, type string
 		 	With this command, the engine tells the GUI information about itself, for example a license text,
 			usually it doesn't make sense that the GUI changes this text with the setoption command.
 			Example:
@@ -443,23 +443,23 @@ GUI     engine
 uci
 
 // engine identify  
-      id name Shredder
-		id author Stefan MK
+        id name Shredder
+	id author Stefan MK
 
 // engine sends the options it can change
 // the engine can change the hash size from 1 to 128 MB
-		option name Hash type spin default 1 min 1 max 128
+        option name Hash type spin default 1 min 1 max 128
 
 // the engine supports Nalimov endgame tablebases
-		option name NalimovPath type string default <empty>
-		option name NalimovCache type spin default 1 min 1 max 32
+        option name NalimovPath type string default <empty>
+	option name NalimovCache type spin default 1 min 1 max 32
 
 // the engine can switch off Nullmove and set the playing style
-	   option name Nullmove type check default true
-  		option name Style type combo default Normal var Solid var Normal var Risky
+        option name Nullmove type check default true
+	option name Style type combo default Normal var Solid var Normal var Risky
 
 // the engine has sent all parameters and is ready
-		uciok
+        uciok
 
 // Note: here the GUI can already send a "quit" command if it just wants to find out
 //       details about the engine, so the engine should not initialize its internal
@@ -477,7 +477,7 @@ setoption name NalimovPath value d:\tb;c\tb
 isready
 
 // engine has finished setting up the internal values
-		readyok
+        readyok
 
 // now we are ready to go
 
@@ -496,19 +496,18 @@ go infinite
 
 // the engine starts sending infos about the search to the GUI
 // (only some examples are given)
-
-
-		info depth 1 seldepth 0
-		info score cp 13  depth 1 nodes 13 time 15 pv f1b5 
-		info depth 2 seldepth 2
-		info nps 15937
-		info score cp 14  depth 2 nodes 255 time 15 pv f1c4 f8c5 
-		info depth 2 seldepth 7 nodes 255
-		info depth 3 seldepth 7
-		info nps 26437
-		info score cp 20  depth 3 nodes 423 time 15 pv f1c4 g8f6 b1c3 
-		info nps 41562
-		....
+        
+	info depth 1 seldepth 0
+	info score cp 13  depth 1 nodes 13 time 15 pv f1b5 
+	info depth 2 seldepth 2
+	info nps 15937
+	info score cp 14  depth 2 nodes 255 time 15 pv f1c4 f8c5 
+	info depth 2 seldepth 7 nodes 255
+	info depth 3 seldepth 7
+	info nps 26437
+	info score cp 20  depth 3 nodes 423 time 15 pv f1c4 g8f6 b1c3 
+	info nps 41562
+	....
 
 
 // here the user has seen enough and asks to stop the searching
@@ -517,7 +516,7 @@ stop
 // the engine has finished searching and is sending the bestmove command
 // which is needed for every "go" command sent to tell the GUI
 // that the engine is ready again
-		bestmove g1f3 ponder d8f6
+        bestmove g1f3 ponder d8f6
 
 
 
