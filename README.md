@@ -135,10 +135,12 @@ These are all the command the engine gets from the interface.
 	the last position sent to the engine, the GUI should have sent a "ucinewgame" inbetween.
 
 * go
-	Allows the engine to start calculating on the current position set up with the "position"
-	command. There are a number of commands that can follow this command, all will be sent in the
-	same string. If one command is not sent its value should be interpreted as it would not
-	influence the search.
+	Allows the engine to start calculating on the current position. This command shall be followed
+	by other command or commands and all will be sent in the same string. Examples:
+	"go wtime 10000 btime 10000"
+	"go movetime 1000 depth 10"
+	Any commands that are not sent, the info or purpose of such commands should not influence the
+	engine's search.
 	* searchmoves <move1> .... <movei>
 		Restrict search to this moves only.
 		Example: After "position startpos" and "go infinite searchmoves e2e4 d2d4"
@@ -154,13 +156,13 @@ These are all the command the engine gets from the interface.
 		are likely to be misinterpreted by the GUI because the GUI expects the engine to ponder on
 		the suggested move.
 	* wtime <x>
-		The white has x msec (milliseconds) left on the clock.
+		The white side has x msec (milliseconds) left on the clock.
 	* btime <x>
-		The black has x msec left on the clock.
+		The black side has x msec left on the clock.
 	* winc <x>
-		This is the white increment per move in msec if x > 0.
+		This is the white side increment per move in msec if x > 0.
 	* binc <x>
-		This is the black increment per move in msec if x > 0.
+		This is the black side increment per move in msec if x > 0.
 	* movestogo <x>
 		There are x moves to the next time control, this will only be sent if x > 0.
 		If you don't get this and get the wtime and btime it's sudden death.
