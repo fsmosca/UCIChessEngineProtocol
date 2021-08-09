@@ -2,7 +2,7 @@ Source: [UCI - Universal Chess Interface](https://www.shredderchess.com/download
 ```
 
 
-Description of the universal chess interface (UCI)    April  2006
+Description of the universal chess interface (UCI)    August 2021
 =================================================================
 
 * The specification is independent of the operating system. For Windows,
