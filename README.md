@@ -210,12 +210,12 @@ Engine to GUI:
 	and must always be answered with "isready".
 
 * bestmove <move1> [ ponder <move2> ]
-	The engine has stopped searching and found the move <move> best in this position.
-	the engine can send the move it likes to ponder on. The engine must not start pondering automatically.
-	this command must always be sent if the engine stops searching, also in pondering mode if there is a
+	The engine has stopped searching and found the move <move1> best in this position.
+	The engine can send the move it likes to ponder on. The engine must not start pondering automatically.
+	This command must always be sent if the engine stops searching, also in pondering mode if there is a
 	"stop" command, so for every "go" command a "bestmove" command is needed!
-	Directly before that the engine should send a final "info" command with the final search information,
-	the the GUI has the complete statistics about the last search.
+	Directly before that, the engine should send a final "info" command with the final search information,
+	so that the GUI has the complete statistics about the last search.
 
 * copyprotection
 	This is needed for copyprotected engines. After the uciok command the engine can tell the GUI,
