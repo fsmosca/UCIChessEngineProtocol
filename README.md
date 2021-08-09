@@ -95,7 +95,7 @@ These are all the command the engine gets from the interface.
 	for example do not use <name> = "draw value".
 	Here are some strings for the example below:
 	   "setoption name Nullmove value true\n"
-      "setoption name Selectivity value 3\n"
+	   "setoption name Selectivity value 3\n"
 	   "setoption name Style value Risky\n"
 	   "setoption name Clear Hash\n"
 	   "setoption name NalimovPath value c:\chess\tb\4;c:\chess\tb\5\n"
@@ -149,7 +149,7 @@ These are all the command the engine gets from the interface.
 		the GUI can be interpreted as a recommendation about which move to ponder. However, if the
 		engine decides to ponder on a different move, it should not display any mainlines as they are
 		likely to be misinterpreted by the GUI because the GUI expects the engine to ponder
-	   on the suggested move.
+		on the suggested move.
 	* wtime <x>
 		The white has x msec left on the clock.
 	* btime <x>
@@ -159,13 +159,13 @@ These are all the command the engine gets from the interface.
 	* binc <x>
 		This is black increment per move in mseconds if x > 0.
 	* movestogo <x>
-      There are x moves to the next time control,
+		There are x moves to the next time control,
 		this will only be sent if x > 0.
 		If you don't get this and get the wtime and btime it's sudden death.
 	* depth <x>
 		Search x plies only.
 	* nodes <x>
-	   Search x nodes only.
+		Search x nodes only.
 	* mate <x>
 		Search for a mate in x moves.
 	* movetime <x>
