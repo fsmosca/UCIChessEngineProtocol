@@ -316,18 +316,15 @@ Engine to GUI:
 		The engine should only send this if the option "UCI_ShowCurrLine" is set to true.
 
 * option
-	This command tells the GUI which parameters can be changed in the engine.
-	This should be sent once at engine startup after the "uci" and the "id" commands
-	if any parameter can be changed in the engine.
-	The GUI should parse this and build a dialog for the user to change the settings.
-	Note that not every option needs to appear in this dialog as some options like
-	"Ponder", "UCI_AnalyseMode", etc. are better handled elsewhere or are set automatically.
-	If the user wants to change some settings, the GUI will send a "setoption" command to the engine.
-	Note that the GUI need not send the setoption command when starting the engine for every option if
-	it doesn't want to change the default value.
-	For all allowed combinations see the examples below,
-	as some combinations of this tokens don't make sense.
-	One string will be sent for each parameter.
+	This command tells the GUI which parameters can be changed in the engine. This should be sent
+	once at engine startup after the "uci" and the "id" commands if any parameter can be changed
+	in the engine. The GUI should parse this and build a dialog for the user to change the settings.
+	Note that not every option needs to appear in this dialog as some options like "Ponder",
+	"UCI_AnalyseMode", etc. are better handled elsewhere or are set automatically. If the user wants
+	to change some settings, the GUI will send a "setoption" command to the engine.
+	Note that the GUI need not send the setoption command when starting the engine for every option
+	if it doesn't want to change the default value. For all allowed combinations see the examples
+	below, as some combinations of this tokens don't make sense. One string will be sent for each parameter.
 	* name <id>
 		The option has the name id.
 		Certain options have a fixed value for <id>, which means that the semantics of this option is fixed.
