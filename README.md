@@ -154,13 +154,13 @@ These are all the command the engine gets from the interface.
 		are likely to be misinterpreted by the GUI because the GUI expects the engine to ponder on
 		the suggested move.
 	* wtime <x>
-		The white has x msec left on the clock.
+		The white has x msec (milliseconds) left on the clock.
 	* btime <x>
 		The black has x msec left on the clock.
 	* winc <x>
-		This is the white increment per move in mseconds if x > 0.
+		This is the white increment per move in msec if x > 0.
 	* binc <x>
-		This is the black increment per move in mseconds if x > 0.
+		This is the black increment per move in msec if x > 0.
 	* movestogo <x>
 		There are x moves to the next time control, this will only be sent if x > 0.
 		If you don't get this and get the wtime and btime it's sudden death.
@@ -171,7 +171,7 @@ These are all the command the engine gets from the interface.
 	* mate <x>
 		Search for a mate in x moves.
 	* movetime <x>
-		Search exactly x mseconds.
+		Search exactly x msec.
 	* infinite
 		Search until the "stop" command. Do not exit the search without being told so in this mode!
     
