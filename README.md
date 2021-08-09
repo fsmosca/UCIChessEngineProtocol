@@ -162,8 +162,7 @@ These are all the command the engine gets from the interface.
 	* binc <x>
 		This is the black increment per move in mseconds if x > 0.
 	* movestogo <x>
-		There are x moves to the next time control,
-		this will only be sent if x > 0.
+		There are x moves to the next time control, this will only be sent if x > 0.
 		If you don't get this and get the wtime and btime it's sudden death.
 	* depth <x>
 		Search x plies only.
