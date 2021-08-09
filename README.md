@@ -144,7 +144,7 @@ These are all the command the engine gets from the interface.
 	* ponder
 		Engine may start searching in pondering mode.
 		Do not exit the search in ponder mode, even if it's mate!
-		This means that the last move sent in in the position string is the ponder move.
+		This means that the last move sent in the position string is the ponder move.
 		The engine can do what it wants to do, but after a "ponderhit" command
 		it should execute the suggested move to ponder on. This means that the ponder move sent by
 		the GUI can be interpreted as a recommendation about which move to ponder. However, if the
