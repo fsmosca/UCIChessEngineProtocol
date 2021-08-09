@@ -175,8 +175,8 @@ These are all the command the engine gets from the interface.
 		Search until the "stop" command. Do not exit the search without being told so in this mode!
     
 * stop
-	Stop calculating as soon as possible,
-	don't forget the "bestmove" and possibly the "ponder" token when finishing the search
+	Stop calculating as soon as possible, don't forget the "bestmove" and possibly the "ponder"
+	token when finishing the search.
 
 * ponderhit
 	The user has played the expected move. This will be sent if the engine was told to ponder on the same move
