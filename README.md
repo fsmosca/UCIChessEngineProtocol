@@ -120,12 +120,12 @@ These are all the command the engine gets from the interface.
 * ucinewgame
 	This is sent to the engine when the next search (started with "position" and "go") will be from
 	a different game. This can be a new game the engine should play or a new game it should analyse
-	but also the next position from a testsuite with positions only. If the GUI hasn't sent a
-	"ucinewgame" before the first "position" command, the engine shouldn't expect any further
-	ucinewgame commands as the GUI is probably not supporting the ucinewgame command. So the engine
-	should not rely on this command even though all new GUIs should support it. As the engine's
-	reaction to "ucinewgame" can take some time the GUI should always send "isready" after
-	"ucinewgame" to wait for the engine to finish its operation.
+	but also the next position from a testsuite with positions only. If the GUI has not sent a
+	"ucinewgame" before the first "position" command, the engine should not expect any further
+	ucinewgame commands as the GUI is probably not supporting such command. So the engine should
+	not rely on this command even though all new GUIs should support it. As the engine's reaction
+	to "ucinewgame" can take some time the GUI should always send "isready" after "ucinewgame" to
+	wait for the engine to finish its operation.
    
 * position [fen <fenstring> | startpos ]  moves <move1> .... <movei>
 	Set up the position described in fenstring on the internal board and
