@@ -223,12 +223,12 @@ Engine to GUI:
 	If the engine reports "copyprotection error" the GUI should not use this engine
 	and display an error message instead!
 	The code in the engine can look like this
-      TellGUI("copyprotection checking\n");
-	   // ... check the copy protection here ...
-	   if(ok)
-	      TellGUI("copyprotection ok\n");
-      else
-         TellGUI("copyprotection error\n");
+	TellGUI("copyprotection checking\n");
+	// ... check the copy protection here ...
+	if(ok)
+	    TellGUI("copyprotection ok\n");
+	else
+	    TellGUI("copyprotection error\n");
          
 * registration
 	This is needed for engines that need a username and/or a code to function with all features.
@@ -280,9 +280,9 @@ Engine to GUI:
 			This is mate in y moves, not plies.
 			If the engine is getting mated use negative values for y.
 		* lowerbound
-	      The score is just a lower bound.
+			The score is just a lower bound.
 		* upperbound
-		   The score is just an upper bound.
+			The score is just an upper bound.
 	* currmove <move>
 		The engine is currently searching this move.
 	* currmovenumber <x>
@@ -301,18 +301,18 @@ Engine to GUI:
 		Any string str which will be displayed be the engine,
 		if there is a string command the rest of the line will be interpreted as <str>.
 	* refutation <move1> <move2> ... <movei>
-	   The move <move1> is refuted by the line <move2> ... <movei>, i can be any number >= 1.
-	   Example: after move d1h5 is searched, the engine can send
-	   "info refutation d1h5 g6h5"
-	   if g6h5 is the best answer after d1h5 or if g6h5 refutes the move d1h5.
-	   If there is no refutation for d1h5 found, the engine should just send
-	   "info refutation d1h5".
+		The move <move1> is refuted by the line <move2> ... <movei>, i can be any number >= 1.
+		Example: after move d1h5 is searched, the engine can send
+		"info refutation d1h5 g6h5"
+		if g6h5 is the best answer after d1h5 or if g6h5 refutes the move d1h5.
+		If there is no refutation for d1h5 found, the engine should just send
+		"info refutation d1h5".
 		The engine should only send this if the option "UCI_ShowRefutations" is set to true.
 	* currline <cpunr> <move1> ... <movei>
-	   This is the current line the engine is calculating. <cpunr> is the number of the cpu if
-	   the engine is running on more than one cpu. <cpunr> = 1,2,3....
-	   If the engine is just using one cpu, <cpunr> can be omitted.
-	   If <cpunr> is greater than 1, always send all k lines in k strings together.
+		This is the current line the engine is calculating. <cpunr> is the number of the cpu if
+		the engine is running on more than one cpu. <cpunr> = 1,2,3....
+		If the engine is just using one cpu, <cpunr> can be omitted.
+		If <cpunr> is greater than 1, always send all k lines in k strings together.
 		The engine should only send this if the option "UCI_ShowCurrLine" is set to true.
 	
 
@@ -369,37 +369,36 @@ Engine to GUI:
 			The engine can show a move and its refutation in a line. See "info refutations" above.
 		* <id> = UCI_LimitStrength, type check, should be false by default,
 			The engine is able to limit its strength to a specific Elo number.
-		   This should always be implemented together with "UCI_Elo".
+			This should always be implemented together with "UCI_Elo".
 		* <id> = UCI_Elo, type spin
 			The engine can limit its strength in Elo within this interval.
 			If UCI_LimitStrength is set to false, this value should be ignored.
 			If UCI_LimitStrength is set to true, the engine should play with this specific strength.
-		   This should always be implemented together with "UCI_LimitStrength".
+			This should always be implemented together with "UCI_LimitStrength".
 		* <id> = UCI_AnalyseMode, type check
-		   The engine wants to behave differently when analysing or playing a game.
-		   For example when playing it can use some kind of learning.
-		   This is set to false if the engine is playing a game, otherwise it is true.
+			The engine wants to behave differently when analysing or playing a game.
+			For example when playing it can use some kind of learning.
+			This is set to false if the engine is playing a game, otherwise it is true.
 		 * <id> = UCI_Opponent, type string
-		   With this command the GUI can send the name, title, elo and if the engine is playing a human
-		   or computer to the engine.
-		   The format of the string has to be [GM|IM|FM|WGM|WIM|none] [<elo>|none] [computer|human] <name>
-		   Examples:
-		   "setoption name UCI_Opponent value GM 2800 human Gary Kasparov"
-		   "setoption name UCI_Opponent value none none computer Shredder"
+		 	With this command the GUI can send the name, title, elo and if the engine is playing a human
+			or computer to the engine.
+			The format of the string has to be [GM|IM|FM|WGM|WIM|none] [<elo>|none] [computer|human] <name>
+			Examples:
+			"setoption name UCI_Opponent value GM 2800 human Gary Kasparov"
+			"setoption name UCI_Opponent value none none computer Shredder"
 		 * <id> = UCI_EngineAbout, type string
-		   With this command, the engine tells the GUI information about itself, for example a license text,
-		   usually it doesn't make sense that the GUI changes this text with the setoption command.
-		   Example:
+		 	With this command, the engine tells the GUI information about itself, for example a license text,
+			usually it doesn't make sense that the GUI changes this text with the setoption command.
+			Example:
 			"option name UCI_EngineAbout type string default Shredder by Stefan Meyer-Kahlen, see www.shredderchess.com"
 		* <id> = UCI_ShredderbasesPath, type string
 			This is either the path to the folder on the hard disk containing the Shredder endgame databases or
 			the path and filename of one Shredder endgame datbase.
-	   * <id> = UCI_SetPositionValue, type string
-	      The GUI can send this to the engine to tell the engine to use a certain value in centipawns from white's
-	      point of view if evaluating this specifix position. 
-	      The string can have the formats:
-	      <value> + <fen> | clear + <fen> | clearall
-	   		
+		* <id> = UCI_SetPositionValue, type string
+			The GUI can send this to the engine to tell the engine to use a certain value in centipawns from white's
+			point of view if evaluating this specifix position. 
+			The string can have the formats:
+			<value> + <fen> | clear + <fen> | clearall
 	* type <t>
 		The option has type t.
 		There are 5 different types of options the engine can send
@@ -423,12 +422,12 @@ Engine to GUI:
 	* var <x>
 		A predefined value of this parameter is x.
 	Examples:
-    Here are 5 strings for each of the 5 possible types of options
-	   "option name Nullmove type check default true\n"
-      "option name Selectivity type spin default 2 min 0 max 4\n"
-	   "option name Style type combo default Normal var Solid var Normal var Risky\n"
-	   "option name NalimovPath type string default c:\\n"
-	   "option name Clear Hash type button\n"
+	Here are 5 strings for each of the 5 possible types of options:
+	"option name Nullmove type check default true\n"
+	"option name Selectivity type spin default 2 min 0 max 4\n"
+	"option name Style type combo default Normal var Solid var Normal var Risky\n"
+	"option name NalimovPath type string default c:\\n"
+	"option name Clear Hash type button\n"
 
 
 
