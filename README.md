@@ -103,7 +103,7 @@ These are all the command the engine gets from the interface.
 
 * register
 	This is the command to try to register an engine or to tell the engine that registration
-	will be done later. This command should always be sent if the engine	has sent "registration error"
+	will be done later. This command should always be sent if the engine has sent "registration error"
 	at program startup.
 	The following tokens are allowed:
 	* later
