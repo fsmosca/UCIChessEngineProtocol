@@ -248,14 +248,14 @@ Engine to GUI:
 	procedure and the user will be informed that the engine is not properly registered.
 	      
 * info
-	The engine wants to send information to the GUI. This should be done whenever one of the info has changed.
-	The engine can send only selected infos or multiple infos with one info command,
+	The engine wants to send information to the GUI. This should be done whenever one of the info has
+	changed. The engine can send only selected infos or multiple infos with one info command,
 	e.g. "info currmove e2e4 currmovenumber 1" or
-	     "info depth 12 nodes 123456 nps 100000".
-	Also all infos belonging to the pv should be sent together
+	     "info depth 12 nodes 123456 nps 100000"
+	Also all infos belonging to the pv should be sent together 
 	e.g. "info depth 2 score cp 214 time 1242 nodes 2124 nps 34928 pv e2e4 e7e5 g1f3"
-	I suggest to start sending "currmove", "currmovenumber", "currline" and "refutation" only after one second
-	to avoid too much traffic.
+	I suggest to start sending "currmove", "currmovenumber", "currline" and "refutation" only after
+	one second to avoid too much traffic.
 	Additional info:
 	* depth <x>
 		This is the search depth in plies.
