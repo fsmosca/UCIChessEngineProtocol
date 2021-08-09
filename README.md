@@ -304,7 +304,7 @@ Engine to GUI:
 	   The move <move1> is refuted by the line <move2> ... <movei>, i can be any number >= 1.
 	   Example: after move d1h5 is searched, the engine can send
 	   "info refutation d1h5 g6h5"
-	   If g6h5 is the best answer after d1h5 or if g6h5 refutes the move d1h5.
+	   if g6h5 is the best answer after d1h5 or if g6h5 refutes the move d1h5.
 	   If there is no refutation for d1h5 found, the engine should just send
 	   "info refutation d1h5".
 		The engine should only send this if the option "UCI_ShowRefutations" is set to true.
