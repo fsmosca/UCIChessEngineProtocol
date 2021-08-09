@@ -173,7 +173,7 @@ These are all the command the engine gets from the interface.
 	* movetime <x>
 		Search exactly x msec.
 	* infinite
-		Search until the "stop" command. Do not exit the search without being told so in this mode!
+		Search until the "stop" command. Do not stop the search without being told to do so in this mode!
     
 * stop
 	Stop calculating as soon as possible, don't forget the "bestmove" and possibly the "ponder"
