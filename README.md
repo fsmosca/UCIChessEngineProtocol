@@ -8,7 +8,7 @@ Description of the universal chess interface (UCI)    April  2006
 * The specification is independent of the operating system. For Windows,
   the engine is a normal exe file, either a console or "real" windows application.
 
-* All communication is done via standard input and output with text commands.
+* All communications are done via standard input and output with text commands.
 
 * The engine should boot and wait for input from the GUI,
   the engine should wait for the "isready" or "setoption" command to set up its internal parameters
