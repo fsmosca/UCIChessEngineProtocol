@@ -47,7 +47,8 @@ Description of the universal chess interface (UCI)    April  2006
 Move format:
 ------------
 
-The move format is in long algebraic notation.
+The move format is in long algebraic notation without piece symbol in the beginning of the move,
+and without "-" and "x" symbols between "from" and "to" squares.
 A nullmove from the Engine to the GUI should be sent as 0000.
 Examples:  e2e4, e7e5, e1g1 (white short castling), e7e8q (for promotion)
 
