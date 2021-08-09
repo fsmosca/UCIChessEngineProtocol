@@ -42,7 +42,8 @@ Description of the universal chess interface (UCI)    April  2006
 
 * If the engine receives a command which is not supposed to come, for example "stop" when the engine is
   not calculating, it should also just ignore it.
-  
+
+
 
 Move format:
 ------------
@@ -185,6 +186,7 @@ These are all the command the engine gets from the interface.
 	Quit the program as soon as possible.
 
 
+
 Engine to GUI:
 --------------
 
@@ -314,7 +316,6 @@ Engine to GUI:
 		If the engine is just using one cpu, <cpunr> can be omitted.
 		If <cpunr> is greater than 1, always send all k lines in k strings together.
 		The engine should only send this if the option "UCI_ShowCurrLine" is set to true.
-	
 
 * option
 	This command tells the GUI which parameters can be changed in the engine.
