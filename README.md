@@ -129,7 +129,7 @@ These are all the command the engine gets from the interface.
 * position [fen <fenstring> | startpos ]  moves <move1> .... <movei>
 	Set up the position described in fenstring on the internal board and
 	play the moves on the internal chess board.
-	if the game was played  from the start position the string "startpos" will be sent
+	If the game was played  from the start position the string "startpos" will be sent
 	Note: no "new" command is needed. However, if this position is from a different game than
 	the last position sent to the engine, the GUI should have sent a "ucinewgame" inbetween.
 
