@@ -158,7 +158,7 @@ These are all the command the engine gets from the interface.
 	* winc <x>
 		This is the white increment per move in mseconds if x > 0.
 	* binc <x>
-		This is black increment per move in mseconds if x > 0.
+		This is the black increment per move in mseconds if x > 0.
 	* movestogo <x>
 		There are x moves to the next time control,
 		this will only be sent if x > 0.
