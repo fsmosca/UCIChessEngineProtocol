@@ -1,7 +1,8 @@
 Source: [UCI - Universal Chess Interface](https://www.shredderchess.com/download.html)
 
 
-# Description of the universal chess interface (UCI)    August 2021
+# Description of the universal chess interface (UCI)
+###### August 2021
 
 #### The specification is independent of the operating system. For Windows, the engine is a normal exe file, either a console or "real" windows application.
 
