@@ -1,6 +1,3 @@
-Source: [UCI - Universal Chess Interface](https://www.shredderchess.com/download.html)
-
-
 # Description of the universal chess interface (UCI)
 ###### August 2021
 
@@ -132,48 +129,35 @@ Stop calculating as soon as possible, don't forget the "bestmove" and possibly t
 
 ## Engine to GUI
 
-#### id  
-	* name <x>  
-		This must be sent after receiving the "uci" command to identify the engine.
-		e.g. "id name Shredder X.Y\n"
-	* author <x>  
-		This must be sent after receiving the "uci" command to identify the engine.
-		e.g. "id author Stefan MK\n"
+### id
+	
+##### name &lt;x&gt;
+This must be sent after receiving the "uci" command to identify the engine. e.g. "id name Shredder X.Y\n"
+	
+##### author <x>  
+This must be sent after receiving the "uci" command to identify the engine. e.g. "id author Stefan MK\n"
 
-#### uciok  
-	Must be sent after the id and optional options to tell the GUI that the engine
-	has sent all infos and is ready in uci mode.
+### uciok  
+Must be sent after the id and optional options to tell the GUI that the engine has sent all infos and is ready in uci mode.
 
-#### readyok  
-	This must be sent when the engine has received an "isready" command and has
-	processed all input and is ready to accept new commands now.
-	It is usually sent after a command that can take some time to be able to wait for the engine,
-	but it can be used anytime, even when the engine is searching,
-	and must always be answered with "isready".
+### readyok
+This must be sent when the engine has received an "isready" command and has processed all input and is ready to accept new commands now. It is usually sent after a command that can take some time to be able to wait for the engine, but it can be used anytime, even when the engine is searching, and must always be answered with "isready".
 
-#### bestmove <move1> [ ponder <move2> ]  
-	The engine has stopped searching and found the move <move1> best in this position.
-	The engine can send the move it likes to ponder on. The engine must not start pondering
-	automatically. This command must always be sent if the engine stops searching, also in
-	pondering mode if there is a "stop" command, so for every "go" command a "bestmove"
-	command is needed! Directly before that, the engine should send a final "info" command with the
-	final search information, so that the GUI has the complete statistics about the last search.
+### bestmove <move1> [ ponder <move2> ]
+The engine has stopped searching and found the move <move1> best in this position. The engine can send the move it likes to ponder on. The engine must not start pondering 	automatically. This command must always be sent if the engine stops searching, also in pondering mode if there is a "stop" command, so for every "go" command a "bestmove" 	command is needed! Directly before that, the engine should send a final "info" command with the final search information, so that the GUI has the complete statistics about the last search.
 
-#### copyprotection  
-	This is needed for copyprotected engines. After the uciok command the engine can tell the GUI,
-	that it will check the copy protection now. This is done by "copyprotection checking". If the
-	check is ok the engine should send "copyprotection ok", otherwise "copyprotection error". If
-	there is an error the engine should not function properly but should not quit alone. If the
-	engine reports "copyprotection error" the GUI should not use this engine and display an error
-	message instead! The code in the engine can look like this.
-	TellGUI("copyprotection checking\n");
-	// ... check the copy protection here ...
-	if(ok)
-	    TellGUI("copyprotection ok\n");
-	else
-	    TellGUI("copyprotection error\n");
+### copyprotection  
+This is needed for copyprotected engines. After the uciok command the engine can tell the GUI, that it will check the copy protection now. This is done by "copyprotection checking". If the check is ok the engine should send "copyprotection ok", otherwise "copyprotection error". If there is an error the engine should not function properly but should not quit alone. If the engine reports "copyprotection error" the GUI should not use this engine and display an error message instead! The code in the engine can look like this.
+```
+TellGUI("copyprotection checking\n");
+// ... check the copy protection here ...
+if(ok)
+    TellGUI("copyprotection ok\n");
+else
+    TellGUI("copyprotection error\n");
+```
          
-#### registration  
+### registration  
 	This is needed for engines that need a username and/or a code to function with all features.
 	Analog to the "copyprotection" command the engine can send "registration checking"
 	after the uciok command followed by either "registration ok" or "registration error".
@@ -189,7 +173,7 @@ Stop calculating as soon as possible, don't forget the "bestmove" and possibly t
 	registered. This way the engine knows that the GUI can deal with the registration procedure and
 	the user will be informed that the engine is not properly registered.
 	      
-#### info  
+### info  
 	The engine wants to send information to the GUI. This should be done whenever one of the info
 	has changed. The engine can send only selected infos or multiple infos with one info command,
 	e.g. "info currmove e2e4 currmovenumber 1" or
@@ -256,7 +240,7 @@ Stop calculating as soon as possible, don't forget the "bestmove" and possibly t
 		If <cpunr> is greater than 1, always send all k lines in k strings together.
 		The engine should only send this if the option "UCI_ShowCurrLine" is set to true.
 
-#### option  
+### option  
 	This command tells the GUI which parameters can be changed in the engine. This should be sent
 	once at engine startup after the "uci" and the "id" commands if any parameter can be changed
 	in the engine. The GUI should parse this and build a dialog for the user to change the
@@ -418,4 +402,8 @@ This is why the castle rights are specified with the letter of the castle rook's
 Upper case letters for white's and lower case letters for black's castling rights.
 Example: The normal chess position would be:
 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w AHah -
+
+## Reference
+* 2006 UCI - Universal Chess Interface from shredderchess [site](https://www.shredderchess.com/download.html)
+* The 2006 protocol can also be found in the doc/src folder on this repository.
 
