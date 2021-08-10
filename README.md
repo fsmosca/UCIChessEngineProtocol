@@ -1,52 +1,38 @@
 Source: [UCI - Universal Chess Interface](https://www.shredderchess.com/download.html)
-```
 
 
-Description of the universal chess interface (UCI)    August 2021
-=================================================================
+# Description of the universal chess interface (UCI)    August 2021
 
-* The specification is independent of the operating system. For Windows,
-  the engine is a normal exe file, either a console or "real" windows application.
+#### The specification is independent of the operating system. For Windows, the engine is a normal exe file, either a console or "real" windows application.
 
-* All communications are done via standard input and output with text commands.
+#### All communications are done via standard input and output with text commands.
 
-* The engine should boot and wait for input from the GUI,
-  the engine should wait for the "isready" or "setoption" command to set up its internal parameters
-  as the boot process should be as quick as possible.
+#### The engine should boot and wait for input from the GUI, the engine should wait for the "isready" or "setoption" command to set up its internal parameters as the boot process should be as quick as possible.
 
-* The engine must always be able to process input from stdin, even while thinking.
+#### The engine must always be able to process input from stdin, even while thinking.
 
-* All command strings the engine receives will end with '\n',
-  also all commands the GUI receives should end with '\n',
-  Note: '\n' can be 0x0d or 0x0a0d or any combination depending on your OS.
-  If you use Engine and GUI in the same OS this should be no problem if you communicate in text
-  mode, but be aware of this when for example running a Linux engine in a Windows GUI.
+#### All command strings the engine receives will end with '\n', also all commands the GUI receives should end with '\n', Note: '\n' can be 0x0d or 0x0a0d or any combination depending on your OS. If you use Engine and GUI in the same OS this should be no problem if you communicate in text mode, but be aware of this when for example running a Linux engine in a Windows GUI.
 
-* Arbitrary white space between tokens is allowed
-  Example: "debug on\n" and  "   debug     on  \n" and "\t  debug \t  \t\ton\t  \n"
-  all set the debug mode of the engine on.
+#### Arbitrary white space between tokens is allowed Example: "debug on\n" and  "   debug     on  \n" and "\t  debug \t  \t\ton\t  \n" all set the debug mode of the engine on.
 
-* The engine will always be in forced mode which means it should never start calculating
-  or pondering without receiving a "go" command first.
+#### The engine will always be in forced mode which means it should never start calculating or pondering without receiving a "go" command first.
 
-* Before the engine is asked to search on a position, there will always be a position command
-  to tell the engine about the current position.
+#### Before the engine is asked to search on a position, there will always be a position command to tell the engine about the current position.
 
-* By default all the opening book handling is done by the GUI,
-  but there is an option for the engine to use its own book ("OwnBook" option, see below).
+#### By default all the opening book handling is done by the GUI, but there is an option for the engine to use its own book ("OwnBook" option, see below).
 
-* If the engine or the GUI receives an unknown command or token it should just ignore it and try to
-  parse the rest of the string in this line.
-  Examples: "joho debug on\n" should switch the debug mode on given that joho is not defined,
-            "debug joho on\n" will be undefined however.
+#### If the engine or the GUI receives an unknown command or token it should just ignore it and try to parse the rest of the string in this line.
+##### Examples
+"joho debug on\n"  
+&nbsp;&nbsp;&nbsp;&nbsp;should switch the debug mode on given that joho is not defined,  
+"debug joho on\n"  
+&nbsp;&nbsp;&nbsp;&nbsp;will be undefined however.
 
-* If the engine receives a command which is not supposed to come, for example "stop" when the
-  engine is not calculating, it should also just ignore it.
+#### If the engine receives a command which is not supposed to come, for example "stop" when the engine is not calculating, it should also just ignore it.
 
 
 
-Move format:
-------------
+## Move format
 
 The move format is in long algebraic notation without piece symbol in the beginning of the move,
 and without "-" and "x" symbols between "from" and "to" squares.
@@ -55,165 +41,116 @@ Examples:  e2e4, e7e5, e1g1 (white short castling), e7e8q (for promotion)
 
 
 
-GUI to engine:
---------------
+## GUI to engine
 
 These are all the command the engine gets from the interface.
 
-* uci
-	Tells the engine to use the uci (universal chess interface),
-	this will be sent once as a first command after program boot
-	to tell the engine to switch to uci mode.
-	After receiving the uci command the engine must identify itself with the "id" command
-	and send the "option" commands to tell the GUI which engine settings the engine supports if
-	any. After that the engine should send "uciok" to acknowledge the uci mode. If no uciok is sent
-	within a certain time period, the engine task will be killed by the GUI.
+### uci
+Tells the engine to use the uci (universal chess interface), this will be sent once as a first command after program boot to tell the engine to switch to uci mode. After receiving the uci command the engine must identify itself with the "id" command and send the "option" commands to tell the GUI which engine settings the engine supports if 	any. After that the engine should send "uciok" to acknowledge the uci mode. If no uciok is sent within a certain time period, the engine task will be killed by the GUI.
 
-* debug [ on | off ]
-	Switches the debug mode of the engine on and off.
-	In debug mode the engine should send additional infos to the GUI, e.g. with the "info string"
-	command, to help debugging, e.g. the commands that the engine has received etc. This mode
-	should be switched off by default and this command can be sent any time, also when the engine
-	is thinking.
+### debug [ on | off ]
+Switches the debug mode of the engine on and off. In debug mode the engine should send additional infos to the GUI, e.g. with the "info string" command, to help debugging, e.g. the commands that the engine has received etc. This mode should be switched off by default and this command can be sent any time, also when the engine is thinking.
 
-* isready
-	This is used to synchronize the engine with the GUI. When the GUI has sent a command or
-	multiple commands that can take some time to complete,
-	this command can be used to wait for the engine to be ready again or
-	to ping the engine to find out if it is still alive.
-	E.g. this should be sent after setting the path to the tablebases as this can take some time.
-	This command is also required once before the engine is asked to do any search
-	to wait for the engine to finish initializing.
-	This command must always be answered with "readyok" and can be sent also when the engine is
-	calculating in which case the engine should also immediately answer with "readyok" without
-	stopping the search.
+### isready
+This is used to synchronize the engine with the GUI. When the GUI has sent a command or multiple commands that can take some time to complete, this command can be used to wait for the engine to be ready again or to ping the engine to find out if it is still alive. E.g. this should be sent after setting the path to the tablebases as this can take some time. This command is also required once before the engine is asked to do any search to wait for the engine to finish initializing. This command must always be answered with "readyok" and can be sent also when the engine is calculating in which case the engine should also immediately answer with "readyok" without stopping the search.
 
-* setoption name <id> [value <x>]
-	This is sent to the engine when the user wants to change the internal parameters
-	of the engine. For the "button" type no value is needed.
-	One string will be sent for each parameter and this will only be sent when the engine is
-	waiting. The name and value of the option in <id> should not be case sensitive and can inlude
-	spaces. The substrings "value" and "name" should be avoided in <id> and <x> to allow
-	unambiguous parsing, for example do not use <name> = "draw value".
-	Here are some strings for the example below:
-	   "setoption name Nullmove value true\n"
-	   "setoption name Selectivity value 3\n"
-	   "setoption name Style value Risky\n"
-	   "setoption name Clear Hash\n"
-	   "setoption name NalimovPath value c:\chess\tb\4;c:\chess\tb\5\n"
+### setoption name <id> [value <x>]
+This is sent to the engine when the user wants to change the internal parameters of the engine. For the "button" type no value is needed. One string will be sent for each parameter and this will only be sent when the engine is waiting. The name and value of the option in <id> should not be case sensitive and can inlude spaces. The substrings "value" and "name" should be avoided in <id> and <x> to allow unambiguous parsing, for example do not use <name> = "draw value". Here are some strings for the example below:
+```
+"setoption name Nullmove value true\n"
+"setoption name Selectivity value 3\n"
+"setoption name Style value Risky\n"
+"setoption name Clear Hash\n"
+"setoption name NalimovPath value c:\chess\tb\4;c:\chess\tb\5\n"
+```
 
-* register
-	This is the command to try to register an engine or to tell the engine that registration
-	will be done later. This command should always be sent if the engine has sent "registration
-	error" at program startup.
-	The following tokens are allowed:
-	* later
-	   The user doesn't want to register the engine now.
-	* name <x>
-	   The engine should be registered with the name <x>.
-	* code <y>
-	   The engine should be registered with the code <y>.
-	Example:
-	   "register later"
-	   "register name Stefan MK code 4359874324"
+### register
+This is the command to try to register an engine or to tell the engine that registration will be done later. This command should always be sent if the engine has sent "registration error" at program startup. The following tokens are allowed:  
+* later  
+    The user doesn't want to register the engine now.  
+* name <x>  
+    The engine should be registered with the name <x>.  
+* code <y>  
+    The engine should be registered with the code <y>.  
+    Example:  
+	"register later"  
+	"register name Stefan MK code 4359874324"
 
-* ucinewgame
-	This is sent to the engine when the next search (started with "position" and "go") will be from
-	a different game. This can be a new game the engine should play or a new game it should analyse
-	but also the next position from a testsuite with positions only. If the GUI has not sent a
-	"ucinewgame" before the first "position" command, the engine should not expect any further
-	ucinewgame commands as the GUI is probably not supporting such command. So the engine should
-	not rely on this command even though all new GUIs should support it. As the engine's reaction
-	to "ucinewgame" can take some time the GUI should always send "isready" after "ucinewgame" to
-	wait for the engine to finish its operation.
+### ucinewgame  
+This is sent to the engine when the next search (started with "position" and "go") will be from a different game. This can be a new game the engine should play or a new game it should analyse but also the next position from a testsuite with positions only. If the GUI has not sent a "ucinewgame" before the first "position" command, the engine should not expect any further ucinewgame commands as the GUI is probably not supporting such command. So the engine should not rely on this command even though all new GUIs should support it. As the engine's reaction to "ucinewgame" can take some time the GUI should always send "isready" after "ucinewgame" to wait for the engine to finish its operation.
    
-* position [fen <fenstring> | startpos ]  moves <move1> .... <movei>
-	Set up the position described in fenstring on the internal board and
-	play the moves on the internal chess board.
-	If the game was played  from the start position the string "startpos" will be sent
-	Note: no "new" command is needed. However, if this position is from a different game than
-	the last position sent to the engine, the GUI should have sent a "ucinewgame" inbetween.
+### position [fen <fenstring> | startpos ]  moves <move1> .... <movei>
+Set up the position described in fenstring on the internal board and play the moves on the internal chess board. If the game was played  from the start position the string "startpos" will be sent.  
+Note: no "new" command is needed. However, if this position is from a different game than the last position sent to the engine, the GUI should have sent a "ucinewgame" inbetween.
 
-* go
-	Allows the engine to start calculating on the current position. This command shall be followed
-	by other command or commands and all will be sent in the same string. Examples:
-	"go wtime 10000 btime 10000"
-	"go movetime 1000 depth 10"
-	Any commands that are not sent, the info or purpose of such commands should not influence the
-	engine's search.
-	* searchmoves <move1> .... <movei>
-		Restrict search to this moves only.
-		Example: After "position startpos" and "go infinite searchmoves e2e4 d2d4"
-		the engine should only search the two moves e2e4 and d2d4 in the initial position.
-	* ponder
-		Engine may start searching in pondering mode.
-		Do not exit the search in ponder mode, even if it's mate!
-		This means that the last move sent in the position string is the ponder move.
-		The engine can do what it wants to do, but after a "ponderhit" command
-		it should execute the suggested move to ponder on. This means that the ponder move sent by
-		the GUI can be interpreted as a recommendation about which move to ponder. However, if the
-		engine decides to ponder on a different move, it should not display any mainlines as they
-		are likely to be misinterpreted by the GUI because the GUI expects the engine to ponder on
-		the suggested move.
-	* wtime <x>
-		The white side has x msec (milliseconds) left on the clock.
-	* btime <x>
-		The black side has x msec left on the clock.
-	* winc <x>
-		This is the white side increment per move in msec if x > 0.
-	* binc <x>
-		This is the black side increment per move in msec if x > 0.
-	* movestogo <x>
-		There are x moves to the next time control, this will only be sent if x > 0.
-		If you don't get this and get the wtime and btime it's sudden death.
-	* depth <x>
-		Search x plies only.
-	* nodes <x>
-		Search x nodes only.
-	* mate <x>
-		Search for a mate in x moves.
-	* movetime <x>
-		Search exactly x msec.
-	* infinite
-		Search until the "stop" command. Do not stop the search without being told to do so in this mode!
-    
-* stop
-	Stop calculating as soon as possible, don't forget the "bestmove" and possibly the "ponder"
-	token when finishing the search.
+### go
+Allows the engine to start calculating on the current position. This command shall be followed by other command or commands and all will be sent in the same string.  
+Examples:  
+```
+"go wtime 10000 btime 10000"
+"go movetime 1000 depth 10"
+```
+Any commands that are not sent, the info or purpose of such commands should not influence the engine's search.  
+##### searchmoves &lt;move1&gt; .... &lt;movei&gt;
+Restrict search to this moves only. Example: After "position startpos" and "go infinite searchmoves e2e4 d2d4" the engine should only search the two moves e2e4 and d2d4 in the initial position.
+##### ponder
+Engine may start searching in pondering mode. Do not exit the search in ponder mode, even if it's mate! This means that the last move sent in the position string is the ponder move. The engine can do what it wants to do, but after a "ponderhit" command it should execute the suggested move to ponder on. This means that the ponder move sent by the GUI can be interpreted as a recommendation about which move to ponder. However, if the engine decides to ponder on a different move, it should not display any mainlines as they are likely to be misinterpreted by the GUI because the GUI expects the engine to ponder on the suggested move.  
+##### wtime &lt;x&gt;
+The white side has x msec (milliseconds) left on the clock.
+##### btime &lt;x&gt;
+The black side has x msec left on the clock.  
+##### winc &lt;x&gt;  
+This is the white side increment per move in msec if x > 0.  
+##### binc &lt;x&gt;
+This is the black side increment per move in msec if x > 0.  
+##### movestogo &lt;x&gt;
+There are x moves to the next time control, this will only be sent if x > 0. If you don't get this and get the wtime and btime it's sudden death.
+##### depth <x>
+Search x plies only.  
+##### nodes <x>
+Search x nodes only.
+##### mate <x>
+Search for a mate in x moves.  
+##### movetime <x>
+Search exactly x msec.
+##### infinite
+Search until the "stop" command. Do not stop the search without being told to do so in this mode!
+	
+### stop
+Stop calculating as soon as possible, don't forget the "bestmove" and possibly the "ponder" token when finishing the search.
 
-* ponderhit
+### ponderhit  
 	The user has played the expected move. This will be sent if the engine was told to ponder on
 	the same move the user has played. The engine should continue searching but switch from
 	pondering to normal search.
 
-* quit
+### quit  
 	Quit the program as soon as possible.
 
 
 
-Engine to GUI:
---------------
+## Engine to GUI
 
-* id
-	* name <x>
+#### id  
+	* name <x>  
 		This must be sent after receiving the "uci" command to identify the engine.
 		e.g. "id name Shredder X.Y\n"
-	* author <x>
+	* author <x>  
 		This must be sent after receiving the "uci" command to identify the engine.
 		e.g. "id author Stefan MK\n"
 
-* uciok
+#### uciok  
 	Must be sent after the id and optional options to tell the GUI that the engine
 	has sent all infos and is ready in uci mode.
 
-* readyok
+#### readyok  
 	This must be sent when the engine has received an "isready" command and has
 	processed all input and is ready to accept new commands now.
 	It is usually sent after a command that can take some time to be able to wait for the engine,
 	but it can be used anytime, even when the engine is searching,
 	and must always be answered with "isready".
 
-* bestmove <move1> [ ponder <move2> ]
+#### bestmove <move1> [ ponder <move2> ]  
 	The engine has stopped searching and found the move <move1> best in this position.
 	The engine can send the move it likes to ponder on. The engine must not start pondering
 	automatically. This command must always be sent if the engine stops searching, also in
@@ -221,7 +158,7 @@ Engine to GUI:
 	command is needed! Directly before that, the engine should send a final "info" command with the
 	final search information, so that the GUI has the complete statistics about the last search.
 
-* copyprotection
+#### copyprotection  
 	This is needed for copyprotected engines. After the uciok command the engine can tell the GUI,
 	that it will check the copy protection now. This is done by "copyprotection checking". If the
 	check is ok the engine should send "copyprotection ok", otherwise "copyprotection error". If
@@ -235,7 +172,7 @@ Engine to GUI:
 	else
 	    TellGUI("copyprotection error\n");
          
-* registration
+#### registration  
 	This is needed for engines that need a username and/or a code to function with all features.
 	Analog to the "copyprotection" command the engine can send "registration checking"
 	after the uciok command followed by either "registration ok" or "registration error".
@@ -251,7 +188,7 @@ Engine to GUI:
 	registered. This way the engine knows that the GUI can deal with the registration procedure and
 	the user will be informed that the engine is not properly registered.
 	      
-* info
+#### info  
 	The engine wants to send information to the GUI. This should be done whenever one of the info
 	has changed. The engine can send only selected infos or multiple infos with one info command,
 	e.g. "info currmove e2e4 currmovenumber 1" or
@@ -261,49 +198,49 @@ Engine to GUI:
 	I suggest to start sending "currmove", "currmovenumber", "currline" and "refutation" only after
 	one second to avoid too much traffic.
 	Additional info:
-	* depth <x>
+	* depth <x>  
 		This is the search depth in plies.
-	* seldepth <x>
+	* seldepth <x>  
 		This is the selective search depth in plies.
 		If the engine sends seldepth there must also be a "depth" present in the same string.
-	* time <x>
+	* time <x>  
 		The time searched in ms, this should be sent together with the pv.
-	* nodes <x>
+	* nodes <x>  
 		The x nodes searched, the engine should send this info regularly.
-	* pv <move1> ... <movei>
+	* pv <move1> ... <movei>  
 		This is the best line found.
-	* multipv <num>
+	* multipv <num>  
 		This is for the multi pv mode.
 		For the best move/pv add "multipv 1" in the string when you send the pv.
 		In k-best mode always send all k variants in k strings together.
-	* score
-		* cp <x>
+	* score  
+		* cp <x>  
 			This is the score from the engine's point of view in centipawns.
-		* mate <y>
+		* mate <y>  
 			This is mate in y moves, not plies.
 			If the engine is getting mated use negative values for y.
-		* lowerbound
+		* lowerbound  
 			The score is just a lower bound.
-		* upperbound
+		* upperbound  
 			The score is just an upper bound.
-	* currmove <move>
+	* currmove <move>  
 		The engine is currently searching this move.
-	* currmovenumber <x>
+	* currmovenumber <x>  
 		The engine is currently searching move number x, for the first move x should be 1 not 0.
-	* hashfull <x>
+	* hashfull <x>  
 		The hash is x permill full, the engine should send this info regularly.
-	* nps <x>
+	* nps <x>  
 		The x nodes per second searched, the engine should send this info regularly.
-	* tbhits <x>
+	* tbhits <x>  
 		There are x positions where found in the endgame table bases.
-	* sbhits <x>
+	* sbhits <x>  
 		There are x positions where found in the shredder endgame databases.
-	* cpuload <x>
+	* cpuload <x>  
 		The cpu usage of the engine is x permill.
-	* string <str>
+	* string <str>  
 		Any string str which will be displayed be the engine,
 		if there is a string command the rest of the line will be interpreted as <str>.
-	* refutation <move1> <move2> ... <movei>
+	* refutation <move1> <move2> ... <movei>  
 		The move <move1> is refuted by the line <move2> ... <movei>, i can be any number >= 1.
 		Example: after move d1h5 is searched, the engine can send
 		"info refutation d1h5 g6h5"
@@ -311,14 +248,14 @@ Engine to GUI:
 		If there is no refutation for d1h5 found, the engine should just send
 		"info refutation d1h5".
 		The engine should only send this if the option "UCI_ShowRefutations" is set to true.
-	* currline <cpunr> <move1> ... <movei>
+	* currline <cpunr> <move1> ... <movei>  
 		This is the current line the engine is calculating. <cpunr> is the number of the cpu if
 		the engine is running on more than one cpu. <cpunr> = 1,2,3....
 		If the engine is just using one cpu, <cpunr> can be omitted.
 		If <cpunr> is greater than 1, always send all k lines in k strings together.
 		The engine should only send this if the option "UCI_ShowCurrLine" is set to true.
 
-* option
+#### option  
 	This command tells the GUI which parameters can be changed in the engine. This should be sent
 	once at engine startup after the "uci" and the "id" commands if any parameter can be changed
 	in the engine. The GUI should parse this and build a dialog for the user to change the
@@ -329,7 +266,7 @@ Engine to GUI:
 	if it doesn't want to change the default value. For all allowed combinations see the examples
 	below, as some combinations of this tokens don't make sense. One string will be sent for each
 	parameter.
-	* name <id>
+	* name &lt;id&gt;  
 		The option has the name id.
 		Certain options have a fixed value for <id>, which means that the semantics of this option
 		is fixed. Usually those options should not be displayed in the normal engine options window
@@ -339,92 +276,93 @@ Engine to GUI:
 		prefix "UCI_" except for the first 6 options below. If the GUI gets an unknown Option with
 		the prefix "UCI_", it should just ignore it and not display it in the engine's options
 		dialog.
-		* <id> = Hash, type is spin
+		* &lt;id&gt; = Hash, type is spin  
 			The value in MB for memory for hash tables can be changed,
 			this should be answered with the first "setoptions" command at program boot
 			if the engine has sent the appropriate "option name Hash" command,
 			which should be supported by all engines!
 			So the engine should use a very small hash first as default.
-		* <id> = NalimovPath, type string
+		* &lt;id&gt; = NalimovPath, type string  
 			This is the path on the hard disk to the Nalimov compressed format.
 			Multiple directories can be concatenated with ";"
-		* <id> = NalimovCache, type spin
+		* &lt;id&gt; = NalimovCache, type spin  
 			This is the size in MB for the cache for the nalimov table bases.
 			These last two options should also be present in the initial options exchange dialog
 			when the engine is booted if the engine supports it.
-		* <id> = Ponder, type check
+		* &lt;id&gt; = Ponder, type check  
 			This means that the engine is able to ponder.
 			The GUI will send this whenever pondering is possible or not.
 			Note: The engine should not start pondering on its own if this is enabled, this option
 			is only needed because the engine might change its time management algorithm when
 			pondering is allowed.
-		* <id> = OwnBook, type check
+		* &lt;id&gt; = OwnBook, type check  
 			This means that the engine has its own book which is accessed by the engine itself.
 			If this is set, the engine takes care of the opening book and the GUI will never
 			execute a move out of its book for the engine. If this is set to false by the GUI,
 			the engine should not access its own book.
-		* <id> = MultiPV, type spin
+		* &lt;id&gt; = MultiPV, type spin  
 			The engine supports multi best line or k-best mode. The default value is 1.
-		* <id> = UCI_ShowCurrLine, type check, should be false by default,
+		* &lt;id&gt; = UCI_ShowCurrLine, type check, should be false by default,  
 			The engine can show the current line it is calculating. See "info currline" above.
-		* <id> = UCI_ShowRefutations, type check, should be false by default,
+		* &lt;id&gt; = UCI_ShowRefutations, type check, should be false by default,  
 			The engine can show a move and its refutation in a line. See "info refutations" above.
-		* <id> = UCI_LimitStrength, type check, should be false by default,
+		* &lt;id&gt; = UCI_LimitStrength, type check, should be false by default,  
 			The engine is able to limit its strength to a specific Elo number.
 			This should always be implemented together with "UCI_Elo".
-		* <id> = UCI_Elo, type spin
+		* &lt;id&gt; = UCI_Elo, type spin  
 			The engine can limit its strength in Elo within this interval.
 			If UCI_LimitStrength is set to false, this value should be ignored.
 			If UCI_LimitStrength is set to true, the engine should play with this specific
 			strength. This should always be implemented together with "UCI_LimitStrength".
-		* <id> = UCI_AnalyseMode, type check
+		* &lt;id&gt; = UCI_AnalyseMode, type check  
 			The engine wants to behave differently when analysing or playing a game.
 			For example when playing it can use some kind of learning.
 			This is set to false if the engine is playing a game, otherwise it is true.
-		* <id> = UCI_Opponent, type string
+		* &lt;id&gt; = UCI_Opponent, type string  
 		 	With this command the GUI can send the name, title, elo and if the engine is playing a
 			human or computer to the engine. The format of the string has to be
 			[GM|IM|FM|WGM|WIM|none] [<elo>|none] [computer|human] <name>
 			Examples:
 			"setoption name UCI_Opponent value GM 2800 human Gary Kasparov"
 			"setoption name UCI_Opponent value none none computer Shredder"
-		* <id> = UCI_EngineAbout, type string
+		* &lt;id&gt; = UCI_EngineAbout, type string  
 		 	With this command, the engine tells the GUI information about itself, for example a
 			license text, usually it doesn't make sense that the GUI changes this text with the
 			setoption command. Example:
 			"option name UCI_EngineAbout type string default Shredder by Stefan Meyer-Kahlen,
 				see www.shredderchess.com"
-		* <id> = UCI_ShredderbasesPath, type string
+		* &lt;id&gt; = UCI_ShredderbasesPath, type string  
 			This is either the path to the folder on the hard disk containing the Shredder endgame
 			databases or the path and filename of one Shredder endgame datbase.
-		* <id> = UCI_SetPositionValue, type string
+		* &lt;id&gt; = UCI_SetPositionValue, type string  
 			The GUI can send this to the engine to tell the engine to use a certain value in
 			centipawns from white's point of view if evaluating this specifix position.
 			The string can have the formats:
 			<value> + <fen> | clear + <fen> | clearall
-	* type <t>
+	* type &lt;t&gt;  
 		The option has type t.
 		There are 5 different types of options the engine can send
-		* check
+		* check  
 			A checkbox that can either be true or false.
-		* spin
+		* spin  
 			A spin wheel that can be an integer in a certain range.
-		* combo
+		* combo  
 			A combo box that can have different predefined strings as a value.
-		* button
+		* button  
 			A button that can be pressed to send a command to the engine.
-		* string
+		* string  
 			A text field that has a string as a value.
 			An empty string has the value "<empty>".
-	* default <x>
+	* default &lt;x&gt;  
 		The default value of this parameter is x.
-	* min <x>
+	* min &lt;x&gt;    
 		The minimum value of this parameter is x.
-	* max <x>
+	* max &lt;x&gt;    
 		The maximum value of this parameter is x.
-	* var <x>
+	* var &lt;x&gt;    
 		A predefined value of this parameter is x.
-	Examples:
+				
+	#### Examples
 	Here are 5 strings for each of the 5 possible types of options:
 	"option name Nullmove type check default true\n"
 	"option name Selectivity type spin default 2 min 0 max 4\n"
@@ -434,96 +372,30 @@ Engine to GUI:
 
 
 
-Examples:
----------
+## Examples
 
-This is how the communication when the engine boots can look like:
+This is how the communication when the engine boots can look like.
 
-GUI     engine
-
-// tell the engine to switch to UCI mode
-uci
-
-// engine identify  
-        id name Shredder
-	id author Stefan MK
-
-// engine sends the options it can change
-// the engine can change the hash size from 1 to 128 MB
-        option name Hash type spin default 1 min 1 max 128
-
-// the engine supports Nalimov endgame tablebases
-        option name NalimovPath type string default <empty>
-	option name NalimovCache type spin default 1 min 1 max 32
-
-// the engine can switch off Nullmove and set the playing style
-        option name Nullmove type check default true
-	option name Style type combo default Normal var Solid var Normal var Risky
-
-// the engine has sent all parameters and is ready
-        uciok
-
-// Note: here the GUI can already send a "quit" command if it just wants to find out
-//       details about the engine, so the engine should not initialize its internal
-//       parameters before here.
-// now the GUI sets some values in the engine
-// set hash to 32 MB
-setoption name Hash value 32
-
-// init tbs
-setoption name NalimovCache value 1
-setoption name NalimovPath value d:\tb;c\tb
-
-// waiting for the engine to finish initializing
-// this command and the answer is required here!
-isready
-
-// engine has finished setting up the internal values
-        readyok
-
-// now we are ready to go
-
-// if the GUI is supporting it, tell the engine that is is
-// searching on a game that it hasn't searched on before
-ucinewgame
-
-// if the engine supports the "UCI_AnalyseMode" option and the next search is supposed to
-// be an analysis, the GUI should set "UCI_AnalyseMode" to true if it is currently
-// set to false with this engine
-setoption name UCI_AnalyseMode value true
-
-// tell the engine to search infinite from the start position after 1.e4 e5
-position startpos moves e2e4 e7e5
-go infinite
-
-// the engine starts sending infos about the search to the GUI
-// (only some examples are given)
-        
-	info depth 1 seldepth 0
-	info score cp 13  depth 1 nodes 13 time 15 pv f1b5 
-	info depth 2 seldepth 2
-	info nps 15937
-	info score cp 14  depth 2 nodes 255 time 15 pv f1c4 f8c5 
-	info depth 2 seldepth 7 nodes 255
-	info depth 3 seldepth 7
-	info nps 26437
-	info score cp 20  depth 3 nodes 423 time 15 pv f1c4 g8f6 b1c3 
-	info nps 41562
-	....
+|  GUI     |   Engine  |
+| ---------| --------- |				
+| // tell the engine to switch to UCI mode<br> **uci** |  |
+| | // engine identify<br> **id name Shredder**<br> **id author Stefan MK**  |
+| | // engine sends the options it can change<br> // the engine can change the hash size from 1 to 128 MB<br> **option name Hash type spin default 1 min 1 max 128** |
+| | // the engine supports Nalimov endgame tablebases<br> **option name NalimovPath type string default <empty>**<br> **option name NalimovCache type spin default 1 min 1 max 32** |
+| | // the engine can switch off Nullmove<br>// and set the playing style<br> **option name Nullmove type check default true**<br> **option name Style type combo default Normal var Solid var Normal var Risky**  | 
+| | // the engine has sent all parameters and is ready<br> **uciok**  |
+| // Note: here the GUI can already send a "quit"<br>// command if it just wants to find out<br>// details about the engine, so the engine should<br>// not initialize its internal parameters before here.<br>// now the GUI sets some values in the engine set hash to 32 MB<br> **setoption name Hash value 32**  |  |
+|  // init tbs<br>**setoption name NalimovCache value 1**<br>**setoption name NalimovPath value d:\tb;c\tb** |  |
+|  // waiting for the engine to finish initializing<br>// this command and the answer is required here!<br>**isready**  |   |
+|  | // engine has finished setting up the internal values<br>**readyok**  |
+|  // if the engine supports the "UCI_AnalyseMode" option and the next search is supposed to<br>// be an analysis, the GUI should set "UCI_AnalyseMode" to true if it is currently<br>// set to false with this engine<br>**setoption name UCI_AnalyseMode value true**  |   |
+|  // tell the engine to search infinite from the start position after 1.e4 e5<br>**position startpos moves e2e4 e7e5**<br>**go infinite**  |   |
+|  |// the engine starts sending infos about the search to the GUI<br>// (only some examples are given)<br>**info depth 1 seldepth 0**<br>**info score cp 13  depth 1 nodes 13 time 15 pv f1b5**<br>**info depth 2 seldepth 2**<br>**info nps 15937**<br>**info score cp 14  depth 2 nodes 255 time 15 pv f1c4 f8c5**<br>**info depth 2 seldepth 7 nodes 255**<br>**info depth 3 seldepth 7**<br>**info nps 26437**<br>**info score cp 20  depth 3 nodes 423 time 15 pv f1c4 g8f6 b1c3**<br>**info nps 41562**<br> .... |
+| // here the user has seen enough and asks to stop the searching<br>**stop**  |  |
+|  | // the engine has finished searching and is sending the bestmove command<br>// which is needed for every "go" command sent to tell the GUI<br>// that the engine is ready again<br>**bestmove g1f3 ponder d8f6**  |
 
 
-// here the user has seen enough and asks to stop the searching
-stop
-
-// the engine has finished searching and is sending the bestmove command
-// which is needed for every "go" command sent to tell the GUI
-// that the engine is ready again
-        bestmove g1f3 ponder d8f6
-
-
-
-Chess960
-========
+## Chess960
 
 UCI could easily be extended to support Chess960 (also known as Fischer Random Chess).
 
@@ -545,4 +417,4 @@ This is why the castle rights are specified with the letter of the castle rook's
 Upper case letters for white's and lower case letters for black's castling rights.
 Example: The normal chess position would be:
 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w AHah -
-```
+
