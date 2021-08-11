@@ -93,37 +93,45 @@ Any commands that are not sent, the info or purpose of such commands should not 
 Restrict search to this moves only. Example: After "position startpos" and "go infinite searchmoves e2e4 d2d4" the engine should only search the two moves e2e4 and d2d4 in the initial position.
 ##### ponder
 Engine may start searching in pondering mode. Do not exit the search in ponder mode, even if it's mate! This means that the last move sent in the position string is the ponder move. The engine can do what it wants to do, but after a "ponderhit" command it should execute the suggested move to ponder on. This means that the ponder move sent by the GUI can be interpreted as a recommendation about which move to ponder. However, if the engine decides to ponder on a different move, it should not display any mainlines as they are likely to be misinterpreted by the GUI because the GUI expects the engine to ponder on the suggested move.  
+	
 ##### wtime &lt;x&gt;
 The white side has x msec (milliseconds) left on the clock.
+	
 ##### btime &lt;x&gt;
 The black side has x msec left on the clock.  
+	
 ##### winc &lt;x&gt;  
 This is the white side increment per move in msec if x > 0.  
+	
 ##### binc &lt;x&gt;
 This is the black side increment per move in msec if x > 0.  
+	
 ##### movestogo &lt;x&gt;
 There are x moves to the next time control, this will only be sent if x > 0. If you don't get this and get the wtime and btime it's sudden death.
+	
 ##### depth <x>
 Search x plies only.  
+	
 ##### nodes <x>
 Search x nodes only.
+	
 ##### mate <x>
 Search for a mate in x moves.  
+	
 ##### movetime <x>
 Search exactly x msec.
+	
 ##### infinite
 Search until the "stop" command. Do not stop the search without being told to do so in this mode!
 	
 ### stop
 Stop calculating as soon as possible, don't forget the "bestmove" and possibly the "ponder" token when finishing the search.
 
-### ponderhit  
-	The user has played the expected move. This will be sent if the engine was told to ponder on
-	the same move the user has played. The engine should continue searching but switch from
-	pondering to normal search.
+### ponderhit
+The user has played the expected move. This will be sent if the engine was told to ponder on the same move the user has played. The engine should continue searching but switch from pondering to normal search.
 
-### quit  
-	Quit the program as soon as possible.
+### quit
+Quit the program as soon as possible.
 
 
 
@@ -131,10 +139,10 @@ Stop calculating as soon as possible, don't forget the "bestmove" and possibly t
 
 ### id
 	
-##### name &lt;x&gt;
+#### name &lt;x&gt;
 This must be sent after receiving the "uci" command to identify the engine. e.g. "id name Shredder X.Y\n"
 	
-##### author <x>  
+#### author <x>  
 This must be sent after receiving the "uci" command to identify the engine. e.g. "id author Stefan MK\n"
 
 ### uciok  
@@ -157,75 +165,67 @@ else
     TellGUI("copyprotection error\n");
 ```
          
-### registration  
-	This is needed for engines that need a username and/or a code to function with all features.
-	Analog to the "copyprotection" command the engine can send "registration checking"
-	after the uciok command followed by either "registration ok" or "registration error".
-	Also after every attempt to register the engine it should answer with "registration checking"
-	and then either "registration ok" or "registration error".
-	In contrast to the "copyprotection" command, the GUI can use the engine after the engine has
-	reported an error, but should inform the user that the engine is not properly registered
-	and might not use all its features.
-	In addition the GUI should offer to open a dialog to enable registration of the engine.
-	To try to register an engine the GUI can send the "register" command. The GUI has to always
-	answer with the "register" command if the engine sends "registration error" at engine startup
-	(this can also be done with "register later") and tell the user somehow that the engine is not
-	registered. This way the engine knows that the GUI can deal with the registration procedure and
-	the user will be informed that the engine is not properly registered.
+### registration
+This is needed for engines that need a username and/or a code to function with all features. Analog to the "copyprotection" command the engine can send "registration checking" after the uciok command followed by either "registration ok" or "registration error". 	Also after every attempt to register the engine it should answer with "registration checking" and then either "registration ok" or "registration error". In contrast to the "copyprotection" command, the GUI can use the engine after the engine has reported an error, but should inform the user that the engine is not properly registered and might not use all its features. In addition the GUI should offer to open a dialog to enable registration of the engine. To try to register an engine the GUI can send the "register" command. The GUI has to always answer with the "register" command if the engine sends "registration error" at engine startup (this can also be done with "register later") and tell the user somehow that the engine is not registered. This way the engine knows that the GUI can deal with the registration procedure and the user will be informed that the engine is not properly registered.
 	      
-### info  
-	The engine wants to send information to the GUI. This should be done whenever one of the info
-	has changed. The engine can send only selected infos or multiple infos with one info command,
-	e.g. "info currmove e2e4 currmovenumber 1" or
-	     "info depth 12 nodes 123456 nps 100000"
-	Also all infos belonging to the pv should be sent together 
-	e.g. "info depth 2 score cp 214 time 1242 nodes 2124 nps 34928 pv e2e4 e7e5 g1f3"
-	I suggest to start sending "currmove", "currmovenumber", "currline" and "refutation" only after
-	one second to avoid too much traffic.
-	Additional info:
-	* depth <x>  
-		This is the search depth in plies.
-	* seldepth <x>  
-		This is the selective search depth in plies.
-		If the engine sends seldepth there must also be a "depth" present in the same string.
-	* time <x>  
-		The time searched in ms, this should be sent together with the pv.
-	* nodes <x>  
-		The x nodes searched, the engine should send this info regularly.
-	* pv <move1> ... <movei>  
-		This is the best line found.
-	* multipv <num>  
-		This is for the multi pv mode.
-		For the best move/pv add "multipv 1" in the string when you send the pv.
-		In k-best mode always send all k variants in k strings together.
-	* score  
-		* cp <x>  
-			This is the score from the engine's point of view in centipawns.
-		* mate <y>  
-			This is mate in y moves, not plies.
-			If the engine is getting mated use negative values for y.
-		* lowerbound  
-			The score is just a lower bound.
-		* upperbound  
-			The score is just an upper bound.
-	* currmove <move>  
-		The engine is currently searching this move.
-	* currmovenumber <x>  
-		The engine is currently searching move number x, for the first move x should be 1 not 0.
-	* hashfull <x>  
-		The hash is x permill full, the engine should send this info regularly.
-	* nps <x>  
-		The x nodes per second searched, the engine should send this info regularly.
-	* tbhits <x>  
-		There are x positions where found in the endgame table bases.
-	* sbhits <x>  
-		There are x positions where found in the shredder endgame databases.
-	* cpuload <x>  
-		The cpu usage of the engine is x permill.
-	* string <str>  
+### info
+The engine wants to send information to the GUI. This should be done whenever one of the info has changed. The engine can send only selected infos or multiple infos with one info command, e.g. "info currmove e2e4 currmovenumber 1" or "info depth 12 nodes 123456 nps 100000"  
+Also all infos belonging to the pv should be sent together  
+e.g. "info depth 2 score cp 214 time 1242 nodes 2124 nps 34928 pv e2e4 e7e5 g1f3"  
+I suggest to start sending "currmove", "currmovenumber", "currline" and "refutation" only after one second to avoid too much traffic.
+Additional info:
+##### &emsp;depth &lt;x&gt;
+&emsp;This is the search depth in plies.
+
+##### &emsp;seldepth &lt;x&gt;
+&emsp;This is the selective search depth in plies. If the engine sends seldepth there must also be a "depth" present in the same string.
+	
+##### &emsp;time &lt;x&gt;
+&emsp;The time searched in ms, this should be sent together with the pv.
+	
+##### &emsp;nodes &lt;x&gt;
+&emsp;The x nodes searched, the engine should send this info regularly.
+
+##### &emsp;pv &lt;move1&gt; ... &lt;movei&gt;
+&emsp;This is the best line found.
+	
+##### &emsp;multipv &lt;num&gt;  
+&emsp;This is for the multi pv mode. For the best move/pv add "multipv 1" in the string when you send the pv. In k-best mode always send all k variants in k strings together.
+	
+##### &emsp;score
+```
+    cp <x>  
+    This is the score from the engine's point of view in centipawns.
+
+    mate <y>  
+    This is mate in y moves, not plies. If the engine is getting mated use negative values for y.
+
+    lowerbound  
+    The score is just a lower bound.
+
+    upperbound  
+    The score is just an upper bound.
+```
+
+##### &emsp;currmove &lt;move&gt;  
+The engine is currently searching this move.
+	
+    * currmovenumber &lt;x&gt;   
+	The engine is currently searching move number x, for the first move x should be 1 not 0.
+    * hashfull &lt;x&gt;    
+	The hash is x permill full, the engine should send this info regularly.
+    * nps &lt;x&gt;    
+	The x nodes per second searched, the engine should send this info regularly.
+    * tbhits &lt;x&gt;    
+	There are x positions where found in the endgame table bases.
+    * sbhits &lt;x&gt;    
+	There are x positions where found in the shredder endgame databases.
+    * cpuload &lt;x&gt;  
+	The cpu usage of the engine is x permill.
+    * string <str>  
 		Any string str which will be displayed be the engine,
 		if there is a string command the rest of the line will be interpreted as <str>.
-	* refutation <move1> <move2> ... <movei>  
+    * refutation <move1> <move2> ... <movei>  
 		The move <move1> is refuted by the line <move2> ... <movei>, i can be any number >= 1.
 		Example: after move d1h5 is searched, the engine can send
 		"info refutation d1h5 g6h5"
@@ -233,7 +233,7 @@ else
 		If there is no refutation for d1h5 found, the engine should just send
 		"info refutation d1h5".
 		The engine should only send this if the option "UCI_ShowRefutations" is set to true.
-	* currline <cpunr> <move1> ... <movei>  
+    * currline <cpunr> <move1> ... <movei>  
 		This is the current line the engine is calculating. <cpunr> is the number of the cpu if
 		the engine is running on more than one cpu. <cpunr> = 1,2,3....
 		If the engine is just using one cpu, <cpunr> can be omitted.
@@ -241,50 +241,38 @@ else
 		The engine should only send this if the option "UCI_ShowCurrLine" is set to true.
 
 ### option  
-	This command tells the GUI which parameters can be changed in the engine. This should be sent
-	once at engine startup after the "uci" and the "id" commands if any parameter can be changed
-	in the engine. The GUI should parse this and build a dialog for the user to change the
-	settings. Note that not every option needs to appear in this dialog as some options like
-	"Ponder", "UCI_AnalyseMode", etc. are better handled elsewhere or are set automatically. If the
-	user wants to change some settings, the GUI will send a "setoption" command to the engine.
-	Note that the GUI need not send the setoption command when starting the engine for every option
-	if it doesn't want to change the default value. For all allowed combinations see the examples
-	below, as some combinations of this tokens don't make sense. One string will be sent for each
-	parameter.
-	* name &lt;id&gt;  
-		The option has the name id.
-		Certain options have a fixed value for <id>, which means that the semantics of this option
-		is fixed. Usually those options should not be displayed in the normal engine options window
-		of the GUI but get a special treatment. "Pondering" for example should be set automatically
-		when pondering is enabled or disabled in the GUI options. The same for "UCI_AnalyseMode"
-		which should also be set automatically by the GUI. All those certain options have the
-		prefix "UCI_" except for the first 6 options below. If the GUI gets an unknown Option with
-		the prefix "UCI_", it should just ignore it and not display it in the engine's options
-		dialog.
-		* &lt;id&gt; = Hash, type is spin  
-			The value in MB for memory for hash tables can be changed,
-			this should be answered with the first "setoptions" command at program boot
-			if the engine has sent the appropriate "option name Hash" command,
-			which should be supported by all engines!
-			So the engine should use a very small hash first as default.
-		* &lt;id&gt; = NalimovPath, type string  
-			This is the path on the hard disk to the Nalimov compressed format.
-			Multiple directories can be concatenated with ";"
-		* &lt;id&gt; = NalimovCache, type spin  
-			This is the size in MB for the cache for the nalimov table bases.
-			These last two options should also be present in the initial options exchange dialog
-			when the engine is booted if the engine supports it.
-		* &lt;id&gt; = Ponder, type check  
-			This means that the engine is able to ponder.
-			The GUI will send this whenever pondering is possible or not.
-			Note: The engine should not start pondering on its own if this is enabled, this option
-			is only needed because the engine might change its time management algorithm when
-			pondering is allowed.
-		* &lt;id&gt; = OwnBook, type check  
-			This means that the engine has its own book which is accessed by the engine itself.
-			If this is set, the engine takes care of the opening book and the GUI will never
-			execute a move out of its book for the engine. If this is set to false by the GUI,
-			the engine should not access its own book.
+This command tells the GUI which parameters can be changed in the engine. This should be sent once at engine startup after the "uci" and the "id" commands if any parameter can be changed in the engine. The GUI should parse this and build a dialog for the user to change the settings. Note that not every option needs to appear in this dialog as some options like "Ponder", "UCI_AnalyseMode", etc. are better handled elsewhere or are set automatically. If the user wants to change some settings, the GUI will send a "setoption" command to the engine. Note that the GUI need not send the setoption command when starting the engine for every option if it doesn't want to change the default value. For all allowed combinations see the examples below, as some combinations of this tokens don't make sense. One string will be sent for each parameter.
+
+##### name &lt;id&gt;  
+The option has the name id. Certain options have a fixed value for <id>, which means that the semantics of this option is fixed. Usually those options should not be displayed in the normal engine options window of the GUI but get a special treatment. "Pondering" for example should be set automatically when pondering is enabled or disabled in the GUI options. The same for "UCI_AnalyseMode" which should also be set automatically by the GUI. All those certain options have the prefix "UCI_" except for the first 6 options below. If the GUI gets an unknown Option with the prefix "UCI_", it should just ignore it and not display it in the engine's options dialog.
+
+```
+    * <id> = Hash, type is spin  
+        The value in MB for memory for hash tables can be changed, this should be answered with the first "setoptions"
+	command at program boot if the engine has sent the appropriate "option name Hash" command, which should be supported
+	by all engines! So the engine should use a very small hash first as default.
+	
+    * <id> = NalimovPath, type string  
+	This is the path on the hard disk to the Nalimov compressed format. Multiple directories can be concatenated with ";"
+    
+    * <id> = NalimovCache, type spin  
+	This is the size in MB for the cache for the nalimov table bases.
+	These last two options should also be present in the initial options exchange dialog
+	when the engine is booted if the engine supports it.
+	
+    * <id> = Ponder, type check  
+	This means that the engine is able to ponder.
+	The GUI will send this whenever pondering is possible or not.
+	Note: The engine should not start pondering on its own if this is enabled, this option
+	is only needed because the engine might change its time management algorithm when
+	pondering is allowed.
+
+    * <id> = OwnBook, type check  
+	This means that the engine has its own book which is accessed by the engine itself.
+	If this is set, the engine takes care of the opening book and the GUI will never
+	execute a move out of its book for the engine. If this is set to false by the GUI,
+	the engine should not access its own book.
+	
 		* &lt;id&gt; = MultiPV, type spin  
 			The engine supports multi best line or k-best mode. The default value is 1.
 		* &lt;id&gt; = UCI_ShowCurrLine, type check, should be false by default,  
@@ -324,7 +312,9 @@ else
 			centipawns from white's point of view if evaluating this specifix position.
 			The string can have the formats:
 			<value> + <fen> | clear + <fen> | clearall
-	* type &lt;t&gt;  
+```
+
+##### type &lt;t&gt;  
 		The option has type t.
 		There are 5 different types of options the engine can send
 		* check  
