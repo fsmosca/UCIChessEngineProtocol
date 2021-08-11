@@ -123,7 +123,7 @@ These are all the command the engine gets from the interface.
 	that it should analyse. It can also be a new position from a test suite.
 	If the GUI has not sent a "ucinewgame" before the first "position" command, the engine should
 	not expect any further ucinewgame commands as the GUI is probably not supporting it. Although
-	new GUIs are encouraged to support it, the engine should not rely on this command.
+	new GUIs are required to support it, the engine should not rely on this command.
 	As the engine's reaction to "ucinewgame" might take some time, the GUI should always send
 	"isready" after "ucinewgame" to make sure that the engine will be ready to execute the
 	next command.
